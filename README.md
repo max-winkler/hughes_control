@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-The software is implemented in `Python` and at least version 3.6 is required. Furthermore, the modules `numpy`, `scipy`, `FEniCs 2019.1`, `mshr` and `superlu_dist=6` are needed to execute the program. These modules can easily be installed in a `conda` environment (see [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)):
+The software is implemented in `Python`. The software relies on the  modules `numpy`, `scipy`, `FEniCs=2019.1`, `mshr` and `superlu_dist=6` that are needed to execute the program. These modules can easily be installed in a `conda` environment (see [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)):
 
 ```bash
 conda create -n myenv python=3.8
