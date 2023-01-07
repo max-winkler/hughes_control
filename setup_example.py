@@ -4,82 +4,14 @@ import numpy as np
 
 class Example(object):
     pass
-        
+
 class Example1(Example):
-    
-    def __init__(self):
-        
-        self.gamma = 5.e-1             # barrier parameter
-        self.intensity = Constant(1.0) # Initial intensity for all agents
-
-        room = Rectangle(Point(-1,-1), Point(7.5,5.5))
-
-        # bottom walls
-        wall1 = Rectangle(Point(0,0), Point(2.5,0.2))
-        wall2 = Rectangle(Point(2.8,0), Point(6.2,0.2))
-
-        # first room
-        wall3 = Rectangle(Point(0,0), Point(0.2, 4.2))
-        wall4 = Rectangle(Point(0,4), Point(2.2, 4.2))
-        wall5 = Rectangle(Point(2,1.5), Point(2.2, 4.2))
-
-        # Corridor
-        wall6 = Rectangle(Point(2,1.5), Point(3.2, 1.7))
-
-        # second room
-        wall7 = Rectangle(Point(3,1.5), Point(3.2, 4.2))
-        wall8 = Rectangle(Point(3,4), Point(5.2, 4.2))
-        wall9 = Rectangle(Point(5,1.), Point(5.2, 4.2))
-
-        # Exit
-        wall10 = Rectangle(Point(5,1), Point(6.2,1.2))
-
-        geometry = room - wall1 - wall2 - wall3 - wall4 - wall5 - wall6 - wall7 - wall8 - wall9 - wall10
-        
-        self.mesh = generate_mesh(geometry, 32)
-
-        def wall_region(x):
-            return (x[0] < 8 and x[0] > -0.1 \
-                    and x[1] < 5 and x[1] > -0.5)
-
-        def inside_room(x):
-            return (x[0] < 6.3 and x[0] > 0.0 \
-                    and x[1] < 4.4 and x[1] > 0.0)
-        
-        class Exits(SubDomain):
-            def inside(self, x, on_boundary):
-                return on_boundary and not wall_region(x)
-
-        class Walls(SubDomain):
-            def inside(self, x, on_boundary):
-                return on_boundary and wall_region(x)            
-
-        self.exits = Exits()
-        self.walls = Walls()
-        self.inside_room = inside_room
-        self.wall_region = wall_region
-        
-        self.rho_0 = Expression(('\
-        0.7*exp(-(pow(x[0]-1.2,2) + pow(x[1]-2.7,2))/0.1) \
-        + 0.7*exp(-(pow(x[0]-0.8,2) + pow(x[1]-2,2))/0.1) \
-        + 0.7*exp(-(pow(x[0]-1.,2) + pow(x[1]-3.2,2))/0.1) \
-        + 0.7*exp(-(pow(x[0]-4.2,2) + pow(x[1]-2.7,2))/0.1) \
-        + 0.7*exp(-(pow(x[0]-3.8,2) + pow(x[1]-2,2))/0.1) \
-        + 0.7*exp(-(pow(x[0]-4.0,2) + pow(x[1]-3.2,2))/0.1) \
-        + 0.5*exp(-(pow(x[0]-1.9,2)/0.7 + pow(x[1]-0.8,2)/0.1)) \
-        + 0.5*exp(-(pow(x[0]-3.9,2)/0.7 + pow(x[1]-0.8,2)/0.1))'), degree=2)
-
-        self.ag_pos_0 = np.array([[1.9,1.1]]) #,[3.8,1.3]])
-        self.ag_vel_0 = np.array([[0.3,-0.03]]) #,[0.1,-0.05]])
-        # self.ag_pos_0 = np.empty((0,2))
-        # self.ag_vel_0 = np.empty((0,2))                       
-
-class Example2(Example):
 
     def __init__(self):
 
-        self.gamma = 5.e-2              # barrier parameter
-        self.intensity = Constant(1.0)  # Initial intensity of all agents
+        self.eta = Constant(0.6)
+        self.gamma = 5.e-2             # barrier parameter
+        self.intensity = Constant(1.0)
 
         self.T = 9
         self.N = 300
@@ -93,7 +25,7 @@ class Example2(Example):
         
         geometry = room - wall1 - wall2 - wall3 - wall4 - wall5 # - wall6
         
-        self.mesh = generate_mesh(geometry, 100)
+        self.mesh = generate_mesh(geometry, 32)
 
         def wall_region(x):
             return (x[0] < 6.2 and x[0] > -0.1+DOLFIN_EPS \
@@ -116,7 +48,6 @@ class Example2(Example):
         self.inside_room = inside_room
         self.wall_region = wall_region
         
-        # self.rho_0 = Expression(('(pow(x[0]-1.5,2.) + 3*pow(x[1]-1.2,2.) < 0.35 || pow(x[0]-4,2.) + 3*pow(x[1]-0.7,2.) < 0.35) ? 0.8 : 0.0'), degree=2)
         self.rho_0 = Expression(('0.7*exp(-(pow(x[0]-1.3,2) + pow(x[1]-1.3,2))/0.12) \
         + 0.7*exp(-(0.5*pow(x[0]-4, 2) + pow(x[1]-0.7,2))/0.12) \
         + 0.7*exp(-(pow(x[0]-3.,2) + pow(x[1]-1.2,2))/0.12) \
@@ -124,22 +55,16 @@ class Example2(Example):
         + 0.7*exp(-(pow(x[0]-1.2,2) + pow(x[1]-0.7,2))/0.12) \
         + 0.7*exp(-(pow(x[0]-2.5,2) + pow(x[1]-1.2,2))/0.12)'), degree=2)
        
-        # self.ag_pos_0 = np.empty((0,2))
-        # self.ag_pos_0 = np.array([[2.0, 0.8]])
         self.ag_pos_0 = np.array([[3.3, 1.4]  ,[2.0, 0.7], [1.1, 1.0]])# ,[3,0.9]       
-        self.ag_vel_0 = np.array([[0.5, -0.1] ,[0.6, 0.05], [0.8, -0.05]]) #,[0.5,0.0]
+        self.ag_vel_0 = np.array([[0.5, -0.1] ,[0.6, 0.05], [0.8, -0.05]]) #,[0.5,0.0]        
 
-        #self.trajectory = [];
-        #self.trajectory.append(np.array([[0, 0.8, 0.0], [301, 8.0, 1.4]]))
-        #self.trajectory.append(np.array([[0, 0.5, 0.5], [80, 0.5, -0.5], [160, 0.8, 0.0], [301, 0.0, 0.2]]))
-        
-
-class Example3(Example):
+class Example2(Example):
 
     def __init__(self):
 
         # Parameters
-        self.intensity = Constant(0.5) # Initial intensity for all agents
+        self.eta = Constant(1.5)
+        self.intensity = Constant(0.5)
         self.gamma = 1.e-1             # barrier parameter
 
         self.T = 12
@@ -195,18 +120,13 @@ class Example3(Example):
         self.ag_pos_0 = np.array([[2.4,3.0],[2.7, 4.0]]) # ,[0.1,0.8]])
         self.ag_vel_0 = np.array([[0.15,-0.01],[0.15, 0.01]]) # ,[0.5,0.0]])
 
-        # self.ag_pos_0 = np.empty((0,2))
-
-        # self.trajectory = [];
-        # self.trajectory.append(np.array([[0, 0.4, -0.1], [101, 0.2, -0.6], [201, 0.0, 0.0]]))
-        # self.trajectory.append(np.array([[0, 0.4, 0.2], [101, 0.2, 0.6], [201, 0.0, 0.0]]))
-
-class Example4(Example):
+class Example3(Example):
 
     def __init__(self):
 
         # Parameters
-        self.intensity = Constant(1.0) # Initial intensity for all agents
+        self.eta = Constant(1.5)
+        self.intensity = Constant(1.0)
         self.gamma = 2.e-2             # barrier parameter
         
         self.T = 15        
@@ -259,21 +179,17 @@ class Example4(Example):
         self.rho_0 = Expression(('(x[0] < 4.4 && x[0] > 3.8 && x[1] > 0.1 && x[1] < 3.8)? 0.8 : 0.'), degree=2)
 
         # 2 Agents
-        #self.ag_pos_0 = np.empty((0,2))
         self.ag_pos_0 = np.array([[4.7,1.7]]) # ,[0.1,0.8]])
         self.ag_vel_0 = np.array([[0.4,0.05]]) # ,[0.5,0.0]])
-
-        # self.trajectory = [];
-        # self.trajectory.append(np.array([[0, 0.4, -0.1], [101, 0.2, -0.6], [201, 0.0, 0.0]]))
-        # self.trajectory.append(np.array([[0, 0.4, 0.2], [101, 0.2, 0.6], [201, 0.0, 0.0]]))
         
 
-class Example5(Example):
+class Example4(Example):
 
     def __init__(self):
 
         # Parameters
-        self.intensity = Constant(0.5) # Initial intensity for all agents
+        self.eta = Constant(1.)
+        self.intensity = Constant(0.5)
         self.gamma = 5.e-2             # barrier parameter
 
         self.T = 10
@@ -331,12 +247,6 @@ class Example5(Example):
         self.ag_pos_0 = np.array([[2.,3.0],[3.3,3.1]])
         self.ag_vel_0 = np.array([[0.10,0.1], [0.05,0.0]])
 
-        # self.ag_pos_0 = np.empty((0,2))
-                
-        # self.trajectory = [];
-        # self.trajectory.append(np.array([[0, 0.4, -0.1], [101, 0.2, -0.6], [201, 0.0, 0.0]]))
-        # self.trajectory.append(np.array([[0, 0.4, 0.2], [101, 0.2, 0.6], [201, 0.0, 0.0]]))
-
         
 def create_wall(x1, y1, x2, y2):
     wall_thick = 0.1
@@ -355,7 +265,8 @@ class ExampleOrangerie(Example):
     def __init__(self):
 
         # Parameters
-        self.intensity = Constant(0.5) # Initial intensity for all agents
+        self.eta = Constant(1.)
+        self.intensity = Constant(0.5)
         self.gamma = 1.e-1             # barrier parameter      
     
         room = Rectangle(Point(-0.5, -0.5), Point(8.2, 6.5))
@@ -457,7 +368,7 @@ class ExampleOrangerie(Example):
         class Exits(SubDomain):
             def inside(self, x, on_boundary):
                 return on_boundary and not inside_room(x)
-            
+                
         self.exits = Exits()
         self.walls = Walls()
         self.inside_room = inside_room
