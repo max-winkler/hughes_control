@@ -3,7 +3,7 @@ import time as timer
 import math
 import re
 import scipy.sparse as sp
-import scipy.sparse.linalg as la
+import scipy.sparse.linalg as spla
 
 from hughes_solution import *
 
@@ -177,7 +177,7 @@ def GradientJ(us, cs, rhos, ag_poss, vs, ds):
                 # z = f_rho_v
                 
                 # H1 Gradient
-                z = la.spsolve(A, f_rho_v)
+                z = spla.spsolve(A, f_rho_v)
 
                 Dj_u[i,:,:] += z
                 # Dj_u[i,0,:] = 0 # u0 does not enter in our system!
@@ -187,7 +187,7 @@ def GradientJ(us, cs, rhos, ag_poss, vs, ds):
                         # L2 gradient
                         # ds_grad = ds[i,:]
                         # H1 gradient
-                        ds_grad = la.spsolve(A, ds[i,:])
+                        ds_grad = spla.spsolve(A, ds[i,:])
                         
                         Dj_c[i,:] = alpha_2*cs[i,:] + ds_grad
 
@@ -396,7 +396,7 @@ def Project(zs, cs):
                                       [None, A+Mu, U1],
                                       [-I_A.multiply(U0), -I_A.multiply(U1), I_I]])
 
-                        delta = la.spsolve(DF, -F)
+                        delta = spla.spsolve(DF, -F)
 
                         delta_u0 = delta[0:N+1]
                         delta_u1 = delta[N+1:2*(N+1)]
@@ -440,7 +440,7 @@ def Project(zs, cs):
                         DF = sp.bmat([[A, -sp.eye(N+1)],
                                       [I_A, I_I]])
                         
-                        delta = la.spsolve(DF, -F)
+                        delta = spla.spsolve(DF, -F)
                         delta_d = delta[0:N+1]
                         delta_mu = delta[N+1: 2*(N+1)]
                         
