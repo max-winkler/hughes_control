@@ -83,14 +83,8 @@ def ValueJ(us, cs, rhos, ag_poss):
         for k in range(1,N+1):
                 rho = Function(R)
                 rho.vector().set_local(rhos[k,:])
-
-                if objective_type == 0:
-                        J_track += tau*np.exp(k*tau/T)*assemble(rho*dx(1))
-                elif objective_type == 1:
-                        mass = Constant(assemble(rho*dx))
-                        barycenter = as_vector([Constant(assemble(1/mass*x[i]*rho*dx))\
-                                                for i in range(2)])
-                        J_track += 0.5*tau*assemble(1/mass*rho*inner(x-barycenter,x-barycenter)*dx)
+                
+                J_track += tau*np.exp(k*tau/T)*assemble(rho*dx(1))                
 
         # Value of barrier function
         J_barrier = 0.
