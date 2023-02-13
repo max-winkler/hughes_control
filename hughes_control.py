@@ -555,9 +555,7 @@ for Iter in range(2000):
                 cs_new = cs - s * Dj_c
 
                 # Projection step (due to projected gradient method)
-                WriteAgentMovement(us_new, fileprefix = "us_before_")
                 us_new_proj,cs_new_proj = Project(us_new, cs_new)
-                WriteAgentMovement(us_new_proj, fileprefix = "us_after")
 
                 # Solve forward system for new iterate
                 [rhos_new, phis_new, ag_poss_new] = SolveForward(us_new_proj, cs_new_proj)
