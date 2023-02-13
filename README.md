@@ -7,7 +7,7 @@ The software is implemented in `Python`. The software relies on the  modules `nu
 ```bash
 conda create -n myenv python=3.8
 conda activate myenv
-conda install -c conda-forge numpy scipy fenics=2019.1 mshr=2019.1 superlu_dist=6
+conda install -c conda-forge numpy scipy fenics=2019.1 petsc=3.12 mshr=2019.1 superlu_dist=6
 ```
 Resolving the dependencies in the latter step took 15 minutes on my machine. So be patient.
 

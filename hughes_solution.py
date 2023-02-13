@@ -30,7 +30,7 @@ alpha_2 = 1.e-4 # ATTENTION: Code works only when alpha1=alpha2 (see ValueJ)
 output_basedir = 'output'
 
 # Choose example (defined in setup_example.py)
-example = Example6()
+example = Example3()
 
 # Setup model parameters
 delta_1 = Constant(2.e-1)      # Laplacian in Eikonal eq.
